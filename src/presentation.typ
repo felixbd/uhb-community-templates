@@ -9,7 +9,20 @@
 #import "colors.typ" as uhb_colors
 
 
-#let uhb_logo_print(..args) = box(fill: white, image("./../img/UHB_Logo_Web_RGB.png", ..args))
+#let logo_no_padd(..args) = image("./../img/UHB_Logo_Web_RGB.png", ..args)
+
+#let uhb_logo_print(..args) = context {
+  let L = 0.04 * measure(logo_no_padd(..args)).width
+
+  set align(center + horizon)
+
+  box(
+    fill: green,
+    inset: (x: 5 * L, y: 5 * L),  // diese komische 5l regel
+    stroke: 1pt + black,
+    logo_no_padd(..args),
+  )
+}
 
 
 #let custom-footer(
@@ -39,42 +52,46 @@
       )[
   
         #set align(center + horizon) 
+
+
+        // #polylux.toolbox.side-by-side(gutter: 0mm, columns: (2fr, 1fr))[
+        //  #rect(width: 100%, stroke: none, fill: aqua)
+        // ][
+        //  #rect(width: 100%, stroke: none, fill: eastern)
+        // ]
         
-        #stack(dir: ltr, spacing: 1fr,
-          [
-            #box(inset: (x: 1mm))[
-              #if page.fill != uhb_colors.blau0 {
-                logo(height: 10mm)
-              } else {
-                logo(height: 10mm)
-              }
-            ]
-          ],
+        // #stack(dir: ltr, spacing: 1fr,
+        #polylux.toolbox.side-by-side(gutter: 0mm, columns: (2fr, 1fr),
           [
             #{
-              set align(left)
-              stack(dir: ttb, spacing: 3mm,
-                text(size: 10pt, footer-title),
-                text(size: 12pt, weight: "semibold", orga)
-              )
+              rect(width: 100%, stroke: none, fill: uhb_colors.rot0)[
+                #set align(left)
+                #stack(dir: ttb, spacing: 3mm,
+                  text(size: 10pt, footer-title),
+                  text(size: 12pt, weight: "semibold", orga)
+                )
+              ]
             }
           ],
-          [ 
-            #if here().page() > 1 {
-              set text(size: 15pt)
-              set align(right)
-              box(inset: (x: 4mm))[
-                #stack(
-                  dir: ttb, spacing: 3mm,
-                  if show-date == true {
-                    text(size: 10pt)[#datetime.today().display("[day]. [month repr:short] [year]")]
-                  },
-                  [
-                    #page-numbering(counter(page).at(here()).first(), counter(page).final().first())
-                  ]
-                ) 
-              ]                          
-            }
+          [
+            #rect(width: 100%, stroke: none, fill: uhb_colors.rot2)[
+              #set text(fill: black)
+              #if here().page() > 1 {
+                set text(size: 15pt)
+                set align(right)
+                box(inset: (x: 4mm))[
+                  #stack(
+                    dir: ttb, spacing: 3mm,
+                    if show-date == true {
+                      text(size: 10pt)[#datetime.today().display("[day]. [month repr:short] [year]")]
+                    },
+                    [
+                      #page-numbering(counter(page).at(here()).first(), counter(page).final().first())
+                    ]
+                  ) 
+                ]                          
+              }
+            ]
           ],
         )    
       ]
@@ -157,7 +174,13 @@
 ) = {
   set page(
     paper: paper,
-    header: if logo != none { logo(height: 10mm) } else { uhb_logo_print(height: 10mm)  },
+    header: if logo != none {
+      logo(height: 10mm)
+    } else {
+      place(top + left, dx: 0mm, dy: 0mm, scope: "parent", float: true,
+        uhb_logo_print(height: 10mm)
+      )
+    },
     footer: custom-footer(
       logo: logo,
       footer-title: series,
@@ -189,6 +212,15 @@
       #outline()
     ]
   }
+
+
+  slide[
+
+    #place(dy: 0cm, dx: -2cm)[
+      #uhb_logo_print(height: 10mm)
+    ]
+    
+  ]
   
   body
 }
