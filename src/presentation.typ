@@ -157,6 +157,7 @@
 ) = {
   set page(
     paper: paper,
+    header: if logo != none { logo(height: 10mm) } else { uhb_logo_print(height: 10mm)  },
     footer: custom-footer(
       logo: logo,
       footer-title: series,
