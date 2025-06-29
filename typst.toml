@@ -1,0 +1,16 @@
+[package]
+name = "uhb-community-templates"
+version = "0.1.0"
+entrypoint = "src/presentation.typ"
+authors = ["Felix D"]
+repository = "https://github.com/felixbd/uhb-community-templates"
+license = "MIT"
+keywords = ["uhb", "Uni", "Bremen", "Universität Bremen"]
+categories = ["presentation", "office"]
+description = "Library of templates in Uni Bremen CD."
+exclude = ["/examples/*", "Makefile", "main.pdf",  "shell.nix"]
+
+[template]
+path = "src/template"
+entrypoint = "main.typ"
+thumbnail = "thumbnail.png"
