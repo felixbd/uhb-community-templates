@@ -17,7 +17,7 @@
   set align(center + horizon)
 
   box(
-    fill: green,
+    // fill: green,
     inset: (x: 5 * L, y: 5 * L),  // diese komische 5l regel
     stroke: 1pt + black,
     logo_no_padd(..args),
@@ -32,8 +32,6 @@
   show-date: false,
   page-numbering: (n, total) => { [ #strong[#n] / #total ] },
 ) = {
-  let logo = if logo != none { logo } else { uhb_logo_print }
-
   context {
     set text(fill: if page.fill != uhb_colors.blau0 { white } else { uhb_colors.blau0 })
 
@@ -46,25 +44,18 @@
 
     place(bottom, dx: -current-margin)[
       #box(
-        fill: if page.fill == uhb_colors.blau0 { white } else { uhb_colors.blau0 },
         height: 100% + 1mm,
         width: 100% + 2 * current-margin
       )[
   
         #set align(center + horizon) 
 
-
-        // #polylux.toolbox.side-by-side(gutter: 0mm, columns: (2fr, 1fr))[
-        //  #rect(width: 100%, stroke: none, fill: aqua)
-        // ][
-        //  #rect(width: 100%, stroke: none, fill: eastern)
-        // ]
         
         // #stack(dir: ltr, spacing: 1fr,
         #polylux.toolbox.side-by-side(gutter: 0mm, columns: (2fr, 1fr),
           [
             #{
-              rect(width: 100%, stroke: none, fill: uhb_colors.rot0)[
+              rect(width: 100%, height: 100%, stroke: none, fill: uhb_colors.rot0)[
                 #set align(left)
                 #stack(dir: ttb, spacing: 3mm,
                   text(size: 10pt, footer-title),
@@ -74,7 +65,7 @@
             }
           ],
           [
-            #rect(width: 100%, stroke: none, fill: uhb_colors.rot2)[
+            #rect(width: 100%, height: 100%, stroke: none, fill: uhb_colors.rot2)[
               #set text(fill: black)
               #if here().page() > 1 {
                 set text(size: 15pt)
@@ -100,41 +91,8 @@
 }
 
 
-// --- define slides ----------------------------------------------------------
 
 #let slide(..args) = {
-  polylux.slide(..args)
-}
-
-#let color-slide(
-  bg-fill: uhb_colors.koralle0,
-  font-fill: black,
-  ..args
-) = {
-  set page(fill: bg-fill)
-  set text(fill: font-fill)
-  
-  polylux.slide(..args)
-}
-
-#let black-slide(
-  bg-fill: black,
-  font-fill: white,
-  ..args
-) = {
-  set page(fill: bg-fill)
-  set text(fill: font-fill)
-  
-  polylux.slide(..args)
-}
-
-#let blue-slide(
-  bg-fill: uhb_colors.blau1,
-  ..args
-) = {
-  set page(fill: bg-fill)
-  set text(fill: white)
- 
   polylux.slide(..args)
 }
 
@@ -174,15 +132,19 @@
 ) = {
   set page(
     paper: paper,
-    header: if logo != none {
-      logo(height: 10mm)
-    } else {
-      place(top + left, dx: 0mm, dy: 0mm, scope: "parent", float: true,
-        uhb_logo_print(height: 10mm)
+    header: [
+      #set text(size: 15pt)
+      #show math.equation: set text(size: 15pt)
+
+      #stack(dir: ltr, spacing: 1fr,
+        uhb_logo_print(height: 1cm),
+        box([some logo]),
+        box([Example presentation title \ This is the subtitle]),
+        box([Jane Doe, John Doe \ Bremen, 01.06.2021]),
+        box([Faculty 03 \ Mathematics / Computerscience])
       )
-    },
+    ],
     footer: custom-footer(
-      logo: logo,
       footer-title: series,
       orga: orga,
       show-date: show-date,
@@ -194,16 +156,24 @@
   show math.equation: set text(size: 25pt)
   
   // title slide
-  blue-slide[
-    #[
-      #set align(horizon)
-      
-      = #title
-      
-      #author \
-      #klinik \
-      #if email != none { text(size: 10pt, email) }
-    ]
+  slide[
+    
+    // #set text(size: 17pt)
+    // #show math.equation: set text(size: 17pt)
+    #set page(footer: none, header: none) // turn off footer
+
+    #place(top + left, dx: -2cm, dy: -2cm, scope: "parent", float: true,
+      uhb_logo_print(height: 1.5cm)
+    )
+
+    #set align(horizon)
+    #v(-4cm)
+    
+    = #title
+    
+    #author \
+    #klinik \
+    #if email != none { text(size: 10pt, email) }
   ]
 
   // show toc if param is set
@@ -212,15 +182,6 @@
       #outline()
     ]
   }
-
-
-  slide[
-
-    #place(dy: 0cm, dx: -2cm)[
-      #uhb_logo_print(height: 10mm)
-    ]
-    
-  ]
   
   body
 }

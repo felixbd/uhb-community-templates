@@ -7,37 +7,31 @@
 
 #polylux.enable-handout-mode(false)
 
-// #let muw-logo-white(..args) = muw-box(fill: gray, figure(box([Hello], ..args)))
-// #let muw-logo-blue(..args) = muw-box(fill: gray, figure(box([Hallo], ..args)))
-// #let custom-muw-logos = (muw-logo-white, muw-logo-blue)
-
 
 #show: slides.with(
-  title: [Titel mit blauem Hintergrund],
+  title: [Titel],
   series: [Titel der Präsentation ODER des Vortragenden],
-  klinik: [Universitätsklinik für XY],
+  klinik: [Faculty 03],
   orga: [Organisationseinheit],
 
   author: [Univ. Prof. Dr. Maximilian Mustermann],
-  email: none,  // link("mailto:n12345678@students.meduniwien.ac.at"),
+  email: none,  // link("mailto:your-name@uni-bremen.de"),
 
-  paper: "presentation-16-9",
+  // logo: none,
+
+  paper: "presentation-16-9",  // 4-3
   toc: false,
   show-date: true,
   
-  // if you want to use custom logs for your institute
-  // for example for the Comprehensive Center for AI in Medicine (CAIM)
-  logo: none, // custom-muw-logos,
-
-  page-numbering: (n, total) => { [ #strong[#n] / #total ] },
+  page-numbering: (current, total) => { [ #strong[#current] / #total ] },
   
   // if you want to be fancy
   //  display the page number as a fraction in %
-  /*page-numbering: (n, total) => {[
+  /*page-numbering: (current, total) => {[
     #calc.round(
       eval(
-        str(counter(page).at(here()).first()) + "/" +
-        str(counter(page).final().first()) + "* 100"
+        str(current) + "/" +
+        str(total) + "* 100"
       ),
       digits: 3
     )%
@@ -54,21 +48,11 @@
   = Very minimalist slides
 
   #lorem(10)
-
-  #box(
-    height: 25mm,
-    fill: uhb_colors.blau0,
-    text(fill: white)[
-      ~ Hier ist eine MedUni Wien box ... ~ \
-      ~ Hier könnte auch ein bild sein ... ~
-    ]
-  )
-
 ]
 
 
 #slide[
-  == a random list
+  == list
 
   - abc
   - def
@@ -82,8 +66,6 @@
 ]
 
 
-
-
 #slide[
   == This slide changes!
 
@@ -94,51 +76,8 @@
 ]
 
 
-#black-slide[
-
-  == Are you a radiologist or do you want to show a CT, MRI or X-ray image?
-
-
-  #stack(dir: ltr, spacing: 1fr,
-    [
-      #v(3cm)
-      use: `#black-slide[]`
-    ],
-    [
-      #set text(size: 12pt)
-     
-      #figure(
-        box(
-          stroke: 1pt + white,
-          box([#v(1cm) ~ mri bild oder so ... ~ #v(1cm)], width: 30%)
-        ),
-        caption: [
-          Magnetresonanztomographie Aufnahme eines \
-          menschlichen Kniegelenks, in sagittaler Schichtung @wikipedia_mrt
-        ]
-      )
-    ]
-  )
-]
-
-#color-slide[
-    #show: align.with(center + horizon)
-    
-    // #heading(outlined: false)[Nun eine kurze Demonstration]
-
-    #text(size: 120pt, weight: "bold")[or use `color-slide`]
-]
-
-
-#color-slide(bg-fill: uhb_colors.gruen1)[
-  hier in grün ...
-]
-
-
-
-
 #slide[
-  == syde by side text
+  == side by side text
 
   #polylux.toolbox.side-by-side[
     #lorem(7)
@@ -156,32 +95,4 @@
     #rect(width: 100%, stroke: none, fill: eastern)
   ]
 
-]
-
-
-
-// small insertion of euler and his great identity (tau is better than pi!!)
-
-#[
-  #import "@preview/gru:0.1.0": gru
-  
-  #set text(size: 17pt)
-  #show math.equation: set text(size: 17pt)
-  #set page(footer: none) // turn off footer
-
-
-  #show: gru.with(last-content: [$ \ \ forall phi in ZZ: \ "e"^(i phi tau ) = 1 $ ])
-  
-  $  "e"^(i pi) = -1  \  tau := 2 pi  \  "e"^(i tau) = 1 $
-  
-  $ \ forall psi in ZZ: \ psi "mod" 2 eq.triple 0 \ => "e"^(i psi pi ) = 1 $
-
-]
-
-
-
-#slide[
-  // https://typst.app/docs/reference/model/bibliography/
-
-  #bibliography("lit.bib")
 ]
